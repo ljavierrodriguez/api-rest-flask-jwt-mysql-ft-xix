@@ -25,7 +25,7 @@ def login():
         return jsonify({ "status": "401", "message": "Email/Password are incorrects"}), 401
 
     # token con vencimiento
-    #expire = datetime.timedelta(days=3)
+    expire = datetime.timedelta(days=3)
     #access_token = create_access_token(identity=user.id, expires_delta=expire)
 
     # token sin vencimiento
@@ -33,7 +33,8 @@ def login():
 
     data = {
         "access_token": access_token,
-        "user": user.serialize()
+        "user": user.serialize(),
+        "expire": expire._to_microseconds()
     }
 
     return jsonify({ "status": "200", "message": "Login successfully.", "data": data}), 200
