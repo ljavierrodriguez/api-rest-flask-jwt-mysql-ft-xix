@@ -45,6 +45,21 @@ class User(Base):
             "updated_at": self.updated_at
         }
 
+    def serialize_full_info(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "is_active": self.is_active,
+            "roles": self.get_user_roles(),
+            "profile": self.profile.serialize(),
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
+
+    def get_user_roles(self):
+        return list(map(lambda role: role.serialize(), self.roles))
+
+
 
 class Role(Base):
     __tablename__ = 'roles'
@@ -95,6 +110,8 @@ class Message(Base):
             "message": self.message,
             "from_id": self.from_id,
             "to_id": self.to_id,
+            "user_from": self.user_from.serialize(),
+            "user_to": self.user_to.serialize(),
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }
