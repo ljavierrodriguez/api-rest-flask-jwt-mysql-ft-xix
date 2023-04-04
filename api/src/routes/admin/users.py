@@ -32,11 +32,11 @@ def create_user():
     roles = request.json.get('roles')
 
     if not email:
-        return jsonify({ "status": "422", "message": "Email is required"}), 422
+        return jsonify({ "status": 422, "message": "Email is required"}), 422
     if not password:
-        return jsonify({ "status": "422", "message": "Password is required"}), 422
+        return jsonify({ "status": 422, "message": "Password is required"}), 422
     if not roles:
-        return jsonify({ "status": "422", "message": "Role is required"}), 422
+        return jsonify({ "status": 422, "message": "Role is required"}), 422
 
     
 
@@ -57,9 +57,9 @@ def create_user():
     user.save()
 
     if not user: 
-        return jsonify({ "status": "400", "message": "User not created", "user": {}}), 400
+        return jsonify({ "status": 400, "message": "User not created", "user": {}}), 400
 
-    return jsonify({ "status": "201", "message": "User created", "user": user.serialize()}), 201
+    return jsonify({ "status": 201, "message": "User created", "result": user.serialize()}), 201
 
 @bpUser.route('/users/<int:id>', methods=['PUT'])
 @jwt_required()
