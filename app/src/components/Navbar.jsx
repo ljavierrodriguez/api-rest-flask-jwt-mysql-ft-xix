@@ -12,7 +12,11 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <div className="container-fluid">
-                <Timer className={"btn btn-primary"} duration={currentUser?.data?.expire || 0} />
+                {
+                    !!currentUser && (
+                        <Timer className={"btn btn-primary"} duration={currentUser?.data?.expire || 0} />
+                    )
+                }
                 {/* <button className="btn btn-primary" id="sidebarToggle">
                     Toggle Menu
                 </button> */}
@@ -29,6 +33,11 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/contact">
+                                Contact
+                            </Link>
+                        </li>
                         {
                             !!currentUser ?
                                 (
@@ -70,6 +79,7 @@ const Navbar = () => {
                                     </>
                                 ) : (
                                     <>
+
                                         <li className="nav-item active">
                                             <Link className="nav-link" to="/login">
                                                 Login

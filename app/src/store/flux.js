@@ -6,9 +6,17 @@ const getState = ({ getStore, getActions, setStore }) => {
             password: '',
             file: null,
             error: null,
+            success: null,
             currentUser: null,
             favorites: [],
-            messages: null
+            messages: null,
+            to_name: 'Luis J.',
+            from_name: '',
+            from_email: '',
+            from_message: '',
+            SERVICES_ID: '',
+            TEMPLATE_ID: '',
+            PUBLIC_KEY: '',
         },
         actions: {
             handleChange: e => {
@@ -23,7 +31,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     [name]: files[0]
                 })
             },
-            login: async (e, navigate) => { 
+            login: async (e, navigate) => {
                 e.preventDefault()
                 try {
                     const { email, password, API_URL } = getStore();
@@ -37,12 +45,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
 
                     const response = await fetch(`${API_URL}/api/login`, options)
-                    
+
                     const data = await response.json()
 
                     console.log(data)
 
-                    if(data.status === 200) {
+                    if (data.status === 200) {
                         setStore({ currentUser: data, error: null })
                         sessionStorage.setItem('currentUser', JSON.stringify(data))
                         navigate('/')
@@ -50,13 +58,13 @@ const getState = ({ getStore, getActions, setStore }) => {
                         setStore({ error: data, currentUser: null })
                         navigate('/login')
                     }
-                    
+
                 } catch (error) {
-                    console.log(error);                    
+                    console.log(error);
                 }
             },
             logout: (navigate) => {
-                if(sessionStorage.getItem('currentUser')){
+                if (sessionStorage.getItem('currentUser')) {
                     setStore({
                         currentUser: null,
                         error: null
@@ -65,9 +73,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
                 navigate('/login')
             },
-            register: () => {},
+            register: () => {
+
+            },
             checkCurrentUser: () => {
-                if(sessionStorage.getItem('currentUser')){
+                if (sessionStorage.getItem('currentUser')) {
                     const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
                     setStore({
                         currentUser
@@ -88,7 +98,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const response = await fetch(`${API_URL}/api/messages`, options)
                     const data = await response.json()
 
-                    if(data.status === 200) {
+                    if (data.status === 200) {
                         setStore({ messages: data, error: null })
                     } else {
                         console.log(data)
@@ -96,7 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
 
                 } catch (error) {
-                    
+
                 }
             },
             uploadAvatar: async e => {
@@ -116,7 +126,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
 
                     const response = await fetch(`${API_URL}/api/avatar`, options)
-                    
+
                     const data = await response.json()
 
                     const { result } = data;
@@ -127,12 +137,27 @@ const getState = ({ getStore, getActions, setStore }) => {
                     currentUser.data.user = result // actualizamos currentUser con la nueva informacion del usuario
                     setStore({ currentUser }); // guardamos la informacion en el store
                     sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // actualizamos la informacion en el sessionStorage
-                    
-                    
+
                 } catch (error) {
-                    console.log(error);                    
+                    console.log(error);
                 }
 
+
+            },
+            sendEmail: (e, emailjs) => {
+                e.preventDefault();
+                const { SERVICES_ID, TEMPLATE_ID, PUBLIC_KEY } = getStore();
+
+                emailjs.sendForm(SERVICES_ID, TEMPLATE_ID, e.target, PUBLIC_KEY)
+                    .then((result) => {
+                        console.log(result.text)
+                        setStore({ success: { message: 'Email sent successfully' }, error: null })
+                        e.target.reset();
+                    }, (error) => {
+                        console.log(error.text)
+                        setStore({ error: { message: 'Error, try again later' }, success: null })
+                        e.target.reset();
+                    })
 
             }
         }
