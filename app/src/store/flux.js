@@ -119,7 +119,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                     
                     const data = await response.json()
 
-                    console.log(data)
+                    const { result } = data;
+
+                    console.log(result)
+                    console.log(currentUser)
+
+                    currentUser.data.user = result // actualizamos currentUser con la nueva informacion del usuario
+                    setStore({ currentUser }); // guardamos la informacion en el store
+                    sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // actualizamos la informacion en el sessionStorage
+                    
                     
                 } catch (error) {
                     console.log(error);                    
