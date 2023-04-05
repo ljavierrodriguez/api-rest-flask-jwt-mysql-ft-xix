@@ -83,6 +83,8 @@ class Profile(Base):
     instagram = db.Column(db.String(120), default="")
     github = db.Column(db.String(120), default="")
     linkedin = db.Column(db.String(120), default="")
+    avatar = db.Column(db.String(200), default="")
+    avatar_public_id = db.Column(db.String(120), default="")
     users_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False, unique=True)
 
     def serialize(self):
@@ -90,6 +92,7 @@ class Profile(Base):
             "id": self.id,
             "bio": self.bio,
             "users_id": self.users_id,
+            "avatar": self.avatar,
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }

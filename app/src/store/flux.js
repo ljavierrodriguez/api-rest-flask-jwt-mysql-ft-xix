@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             API_URL: 'https://5000-ljavierrodr-apirestflas-a5t3f39zb0o.ws-us93.gitpod.io',
             email: '',
             password: '',
+            file: null,
             error: null,
             currentUser: null,
             favorites: [],
@@ -14,6 +15,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const { name, value } = e.target;
                 setStore({
                     [name]: value
+                })
+            },
+            handleChangeFile: e => {
+                const { name, files } = e.target;
+                setStore({
+                    [name]: files[0]
                 })
             },
             login: async (e, navigate) => { 
@@ -91,6 +98,34 @@ const getState = ({ getStore, getActions, setStore }) => {
                 } catch (error) {
                     
                 }
+            },
+            uploadAvatar: async e => {
+                e.preventDefault()
+                try {
+                    const { file, currentUser, API_URL } = getStore();
+
+                    const formData = new FormData();
+                    formData.append('avatar', file);
+
+                    const options = {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Authorization': `Bearer ${currentUser?.data?.access_token}`
+                        }
+                    }
+
+                    const response = await fetch(`${API_URL}/api/avatar`, options)
+                    
+                    const data = await response.json()
+
+                    console.log(data)
+                    
+                } catch (error) {
+                    console.log(error);                    
+                }
+
+
             }
         }
     }

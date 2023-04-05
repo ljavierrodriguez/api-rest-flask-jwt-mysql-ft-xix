@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Context } from '../store/AppContext'
 import Timer from './Timer';
+import avatar from './../img/avatar_sin_foto.png'
 
 const Navbar = () => {
 
@@ -11,7 +12,7 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <div className="container-fluid">
-                <Timer className={"btn btn-primary"} duration={currentUser?.data?.expire || 0 } />
+                <Timer className={"btn btn-primary"} duration={currentUser?.data?.expire || 0} />
                 {/* <button className="btn btn-primary" id="sidebarToggle">
                     Toggle Menu
                 </button> */}
@@ -42,6 +43,11 @@ const Navbar = () => {
                                                 aria-haspopup="true"
                                                 aria-expanded="false"
                                             >
+                                                {currentUser?.data?.user?.profile?.avatar !== null ? (
+                                                    <img src={currentUser?.data?.user?.profile?.avatar} alt="avatar" className='rounded-circle mx-2' width={40} height={40} />
+                                                ) : (
+                                                    <img src={avatar} alt="avatar" className='rounded-circle mx-2' width={40} height={40} />
+                                                )}
                                                 {currentUser?.data?.user?.email}
                                             </a>
                                             <div

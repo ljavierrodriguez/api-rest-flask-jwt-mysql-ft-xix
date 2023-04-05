@@ -9,6 +9,7 @@ import injectContext, { Context } from './store/AppContext'
 import Login from './pages/Login'
 import ProtectedRoute from './pages/ProtectedRoute'
 import Message from './pages/Message'
+import Profile from './pages/Profile'
 
 const App = () => {
   const { store: { currentUser } } = useContext(Context);
@@ -24,6 +25,7 @@ const App = () => {
           {/* Page content*/}
           <Routes>
             <Route path='/login' element={<Login />} />
+            <Route path='/profile' element={<ProtectedRoute currentUser={currentUser}><Profile /></ProtectedRoute>} />
             <Route path='/messages' element={<ProtectedRoute currentUser={currentUser}><Message /></ProtectedRoute>} />
             <Route path='/' element={<ProtectedRoute currentUser={currentUser}><Home /></ProtectedRoute>} />
             <Route path='*' element={<NotFound />} />
